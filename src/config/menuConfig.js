@@ -1,82 +1,67 @@
-import {
-    HomeOutlined,/*首页*/
-    AppstoreOutlined,/*商品*/
-    BarsOutlined,/*品类管理*/
-    ToolOutlined,/*商品管理*/
-    UserOutlined,/*用户管理*/
-    SafetyCertificateOutlined,/*角色管理*/
-    AreaChartOutlined,/*图形图表*/
-    BarChartOutlined,/*柱形图*/
-    LineChartOutlined,/*折线图*/
-    PieChartOutlined,/*饼图*/
-    SnippetsOutlined,
-} from '@ant-design/icons';
-
-
 const menuList = [
-    {
-        title: 'Home', // 菜单标题名称
-        key: '/home', // 对应的path
-        icon: <HomeOutlined/>, // 图标名称
-        isPublic: true, // 公开的
-    },
-    {
+  {
+    title: 'Home', // 菜单标题名称
+    key: '/home', // 对应的path
+    icon: 'home', // 图标名称
+    isPublic: true, // 公开的
+  },
+  {
+    title: 'Product',
+    key: '/products',
+    icon: 'appstore',
+    children: [ // 子菜单列表
+      {
+        title: 'Categories',
+        key: '/category',
+        icon: 'bars'
+      },
+      {
         title: 'Products',
-        key: '/products',
-        icon: <AppstoreOutlined/>,
-        children: [ // 子菜单列表
-            {
-                title: 'Category',
-                key: '/category',
-                icon: <BarsOutlined/>,
-            },
-            {
-                title: 'Department',
-                key: '/product',
-                icon: <ToolOutlined/>,
-            },
-        ]
-    },
+        key: '/product',
+        icon: 'tool'
+      },
+    ]
+  },
 
-    {
-        title: 'User',
-        key: '/user',
-        icon: <UserOutlined/>,
-    },
-    {
-        title: 'Role',
-        key: '/role',
-        icon: <SafetyCertificateOutlined/>,
-    },
+  {
+    title: 'Users',
+    key: '/user',
+    icon: 'user'
+  },
+  {
+    title: 'Roles',
+    key: '/role',
+    icon: 'safety',
+  },
 
-    {
-        title: 'Charts',
-        key: '/charts',
-        icon: <AreaChartOutlined/>,
-        children: [
-            {
-                title: 'Bar',
-                key: '/charts/bar',
-                icon: <BarChartOutlined/>
-            },
-            {
-                title: 'Line',
-                key: '/charts/line',
-                icon: <LineChartOutlined/>
-            },
-            {
-                title: 'Pie',
-                key: '/charts/pie',
-                icon: <PieChartOutlined/>
-            },
-        ]
-    },
+  {
+    title: 'Charts',
+    key: '/charts',
+    icon: 'area-chart',
+    children: [
+      {
+        title: 'Bar',
+        key: '/charts/bar',
+        icon: 'bar-chart'
+      },
+      {
+        title: 'Line',
+        key: '/charts/line',
+        icon: 'line-chart'
+      },
+      {
+        title: 'Pie',
+        key: '/charts/pie',
+        icon: 'pie-chart'
+      },
+    ]
+  },
 
-    {
-        title: 'Orders',
-        key: '/order',
-        icon: <SnippetsOutlined/>
-    },
+  {
+    title: 'Orders',
+    key: '/order',
+    icon: 'windows',
+  },
 ]
 
 export default menuList
