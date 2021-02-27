@@ -28,14 +28,14 @@ export default class Line extends Component {
   getOption = (sales, stores) => {
     return {
       title: {
-        text: 'ECharts 入门示例'
+        text: 'ECharts sample'
       },
       tooltip: {},
       legend: {
         data:['Sales Volume', 'In Stock']
       },
       xAxis: {
-        data: ["衬衫","Wool Sweater","Blouse","裤子","高跟鞋","袜子"]
+        data: ["T-shirt","Wool Sweater","Blouse","Pants","Heel shoe","Socks"]
       },
       yAxis: {},
       series: [{
@@ -55,10 +55,10 @@ export default class Line extends Component {
     return (
       <div>
         <Card>
-          <Button type='primary' onClick={this.update}>更新</Button>
+          <Button type='primary' onClick={this.update}>Update</Button>
         </Card>
 
-        <Card title='折线图一'>
+        <Card title='Line Chart 1'>
           <ReactEcharts option={this.getOption(sales, stores)} />
         </Card>
 

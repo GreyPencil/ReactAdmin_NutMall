@@ -10,8 +10,8 @@ export default class Pie extends Component {
   getOption = () => {
     return {
       title : {
-        text: '某站点用户访问来源',
-        subtext: '纯属虚构',
+        text: 'Visitors',
+        subtext: 'Not real',
         x:'center'
       },
       tooltip : {
@@ -21,20 +21,20 @@ export default class Pie extends Component {
       legend: {
         orient: 'vertical',
         left: 'left',
-        data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+        data: ['Visit','Email','ADs','Video ads','Search Engine']
       },
       series : [
         {
-          name: '访问来源',
+          name: 'Visitor source',
           type: 'pie',
           radius : '55%',
           center: ['50%', '60%'],
           data:[
-            {value:335, name:'直接访问'},
-            {value:310, name:'邮件营销'},
-            {value:234, name:'联盟广告'},
-            {value:135, name:'视频广告'},
-            {value:1548, name:'搜索引擎'}
+            {value:335, name:'Visit'},
+            {value:310, name:'Email'},
+            {value:234, name:'ADs'},
+            {value:135, name:'Video ads'},
+            {value:1548, name:'Search Engine'}
           ],
           itemStyle: {
             emphasis: {
@@ -77,16 +77,16 @@ export default class Pie extends Component {
       },
       series : [
         {
-          name:'访问来源',
+          name:'Visitor source',
           type:'pie',
           radius : '55%',
           center: ['50%', '50%'],
           data:[
-            {value:335, name:'直接访问'},
-            {value:310, name:'邮件营销'},
-            {value:274, name:'联盟广告'},
-            {value:235, name:'视频广告'},
-            {value:400, name:'搜索引擎'}
+            {value:335, name:'Visit'},
+            {value:310, name:'Email'},
+            {value:274, name:'Ads'},
+            {value:235, name:'Video ads'},
+            {value:400, name:'Search Engine'}
           ].sort(function (a, b) { return a.value - b.value; }),
           roseType: 'radius',
           label: {
@@ -116,7 +116,7 @@ export default class Pie extends Component {
 
           animationType: 'scale',
           animationEasing: 'elasticOut',
-          animationDelay: function (idx) {
+          animationDelay: function () {
             return Math.random() * 200;
           }
         }
@@ -127,10 +127,10 @@ export default class Pie extends Component {
   render() {
     return (
       <div>
-        <Card title='饼图一'>
+        <Card title='Pie Chart 1'>
           <ReactEcharts option={this.getOption()} style={{height: 300}}/>
         </Card>
-        <Card title='饼图二'>
+        <Card title='Pie Chart 2'>
           <ReactEcharts option={this.getOption2()} style={{height: 300}}/>
         </Card>
       </div>

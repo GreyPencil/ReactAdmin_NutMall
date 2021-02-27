@@ -5,17 +5,14 @@ import {
   Icon,
   Input,
   Button,
-  message
 } from 'antd'
+import {connect} from 'react-redux'
+
 import './login.less'
 import logo from '../../assets/images/logo.png'
-import {reqLogin} from '../../api'
-import memoryUtils from '../../utils/memoryUtils'
-import storageUtils from '../../utils/storageUtils'
-
+import {login} from '../../redux/actions'
 
 const Item = Form.Item // 不能写在import之前
-
 
 /*
 登陆的路由组件
@@ -34,24 +31,9 @@ class Login extends Component {
         // console.log('提交登陆的ajax请求', values)
         // 请求登陆
         const {username, password} = values
-        const result = await reqLogin(username, password) // {status: 0, data: user}  {status: 1, msg: 'xxx'}
-        // console.log('请求成功', result)
-        if (result.status===0) { // 登陆成功
-          // 提示登陆成功
-          message.success('Sign in succeed')
 
-          // 保存user
-          const user = result.data
-          memoryUtils.user = user // 保存在内存中
-          storageUtils.saveUser(user) // 保存到local中
-
-          // 跳转到管理界面 (不需要再回退回到登陆)
-          this.props.history.replace('/')
-
-        } else { // 登陆失败
-          // 提示错误信息
-          message.error(result.msg)
-        }
+        // 调用分发异步action的函数 => 发登陆的异步请求, 有了结果后更新状态
+        this.props.login(username, password)
 
       } else {
         console.log('Failed to check!')
@@ -69,7 +51,7 @@ class Login extends Component {
   对密码进行自定义验证
   */
   /*
-   Username/密码的的合法性要求
+   用户名/密码的的合法性要求
      1). 必须输入
      2). 必须大于等于4位
      3). 必须小于等于12位
@@ -80,9 +62,9 @@ class Login extends Component {
     if(!value) {
       callback('Password is required')
     } else if (value.length<4) {
-      callback('Password is more than 4 digit')
+      callback('Password is more than 4 digits')
     } else if (value.length>12) {
-      callback('Password is less than 12 digit')
+      callback('Password is less than 12 digits')
     } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
       callback('Password contains letters and numbers')
     } else {
@@ -94,9 +76,9 @@ class Login extends Component {
   render () {
 
     // 如果用户已经登陆, 自动跳转到管理界面
-    const user = memoryUtils.user
+    const user = this.props.user
     if(user && user._id) {
-      return <Redirect to='/'/>
+      return <Redirect to='/home'/>
     }
 
     // 得到具强大功能的form对象
@@ -104,68 +86,69 @@ class Login extends Component {
     const { getFieldDecorator } = form;
 
     return (
-      <div className="login">
-        <header className="login-header">
-          <img src={logo} alt="logo"/>
-          <h1>React Backstage Management</h1>
-        </header>
-        <section className="login-content">
-          <h2>Member Login</h2>
-          <Form onSubmit={this.handleSubmit} className="login-form">
-            <Item>
-              {
-                /*
-              Username/密码的的合法性要求
-                1). 必须输入
-                2). 必须大于等于4位
-                3). 必须小于等于12位
-                4). 必须是英文、数字或下划线组成
-               */
-              }
-              {
-                getFieldDecorator('username', { // 配置对象: 属性名是特定的一些名称
-                  // 声明式验证: 直接使用别人定义好的验证规则进行验证
-                  rules: [
-                    { required: true, whitespace: true, message: 'Username is required' },
-                    { min: 4, message: 'Username more than 4 digit' },
-                    { max: 12, message: 'Username less than 12 digit' },
-                    { pattern: /^[a-zA-Z0-9_]+$/, message: 'Username contains letters and numbers' },
-                  ],
-                  initialValue: 'admin', // 初始值
-                })(
-                  <Input
-                    prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                    placeholder="Username"
-                  />
-                )
-              }
-            </Item>
-            <Form.Item>
-              {
-                getFieldDecorator('password', {
-                  rules: [
-                    {
-                      validator: this.validatePwd
-                    }
-                  ]
-                })(
-                  <Input
-                    prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                    type="password"
-                    placeholder="password"
-                  />
-                )
-              }
+        <div className="login">
+          <header className="login-header">
+            <img src={logo} alt="logo"/>
+            <h1>Backstage Management System</h1>
+          </header>
+          <section className="login-content">
+            <div className={user.errorMsg ? 'error-msg show' : 'error-msg'}>{user.errorMsg}</div>
+            <h2>Member Sign in</h2>
+            <Form onSubmit={this.handleSubmit} className="login-form">
+              <Item>
+                {
+                  /*
+                用户名/密码的的合法性要求
+                  1). 必须输入
+                  2). 必须大于等于4位
+                  3). 必须小于等于12位
+                  4). 必须是英文、数字或下划线组成
+                 */
+                }
+                {
+                  getFieldDecorator('username', { // 配置对象: 属性名是特定的一些名称
+                    // 声明式验证: 直接使用别人定义好的验证规则进行验证
+                    rules: [
+                      { required: true, whitespace: true, message: 'Username is required' },
+                      { min: 4, message: 'Username is more than 4 digits' },
+                      { max: 12, message: 'Username is less than 12 digits' },
+                      { pattern: /^[a-zA-Z0-9_]+$/, message: 'Username contains letters and numbers' },
+                    ],
+                    initialValue: 'admin', // 初始值
+                  })(
+                      <Input
+                          prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                          placeholder="username"
+                      />
+                  )
+                }
+              </Item>
+              <Form.Item>
+                {
+                  getFieldDecorator('password', {
+                    rules: [
+                      {
+                        validator: this.validatePwd
+                      }
+                    ]
+                  })(
+                      <Input
+                          prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                          type="password"
+                          placeholder="password"
+                      />
+                  )
+                }
 
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" className="login-form-button">
-                登陆
-              </Button>
-            </Form.Item>
-          </Form>
-        </section>
-      </div>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" className="login-form-button">
+                  Sign in
+                </Button>
+              </Form.Item>
+            </Form>
+          </section>
+        </div>
     )
   }
 }
@@ -194,7 +177,12 @@ class Login extends Component {
 新组件会向Form组件传递一个强大的对象属性: form
  */
 const WrapLogin = Form.create()(Login)
-export default WrapLogin
+export default connect(
+    state => ({user: state.user}),
+    {login}
+)(WrapLogin)
+
+
 /*
 1. 前台表单验证
 2. 收集表单输入数据
@@ -202,7 +190,7 @@ export default WrapLogin
 
 /*
 async和await
-1. 作用：
+1. 作用?
    简化promise对象的使用: 不用再使用then()来指定成功/失败的回调函数
    以同步编码(没有回调函数了)方式实现异步流程
 2. 哪里写await?
